@@ -16,7 +16,7 @@ public class Bot {
         while (ok)
         {
             Scanner keyboard = new Scanner(System.in);
-            
+
             System.out.println("enter an integer");
             request = keyboard.nextInt();
             switch (request)
