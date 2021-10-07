@@ -21,8 +21,12 @@ public class Card {
         return sign;
     }
 
-    public boolean isValue() {
+    public boolean getValue() {
         return value;
+    }
+
+    public void setValue(boolean value) {
+        this.value = value;
     }
 
     @Override
@@ -33,4 +37,11 @@ public class Card {
         return getNumber() == card.getNumber() && getSign() == card.getSign();
     }
 
+    @Override
+    public String toString() {
+        return "Card{" +
+                "number=" + number +
+                ", sign=" + sign +
+                '}';
+    }
 }
