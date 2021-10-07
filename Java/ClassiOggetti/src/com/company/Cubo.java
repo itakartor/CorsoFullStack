@@ -7,6 +7,7 @@ public class Cubo extends Solido{
         super.setNome("Cubo");
     }
     @Override
+
     public void setLunghezza(int lunghezza) {
         super.setAltezza(lunghezza);
         super.setLarghezza(lunghezza);
