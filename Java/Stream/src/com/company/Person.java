@@ -8,13 +8,8 @@ public class Person {
     private String name;
     private int years;
 
-    public Person(int years,String name)
-    {
-        this.years = years;
-        this.name = name;
-    }
-    public Person(int year,int month,int day, String name) {
-        this.dateBirth = LocalDate.of(year,month,day);
+    public Person(int year,int month,int day, String name) {//memorizzo la data della persona e ogni volta che necessito la sua età
+        this.dateBirth = LocalDate.of(year,month,day);      //la calcolo attraverso l'apposità funzione
         this.name = name;
     }
 
