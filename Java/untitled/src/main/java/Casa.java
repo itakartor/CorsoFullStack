@@ -1,7 +1,7 @@
 import lombok.*;
 
 @Data
-@AllArgsConstructor
+@Builder
 public class Casa {
     private int piano;
     private int altezza;
