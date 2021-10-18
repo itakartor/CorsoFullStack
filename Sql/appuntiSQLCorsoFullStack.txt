@@ -1,0 +1,213 @@
+
+v.veronica@tdnet.it
+
+Create Table NomeTabella(
+	nomeCampo tipoCampo(lunghezza Campo) constrain vari--> Not Null, default "valore di default"
+)
+
+ALTER TABLE Ordini
+ADD CONSTRAINT PK_Ordini PRIMARY KEY (IDOrdine)
+ADD CONSTRAINT PK_Ordini Foreign key (IDPersona) reference TabellaDaCollegare(CampoPKDellaTabella)
+
+alter table Ordini
+alter column nomeCampo nuovoTipoDellaVariabile
+
+
+USE DBAuto_Vitiello
+CREATE TABLE Auto(
+	IDMacchina INT NOT NULL,
+	Targa VARCHAR(255) NOT NULL, 
+	Modello VARCHAR(255) NOT NULL,
+	Prezzo DECIMAL, 
+	Nuova BIT DEFAULT 1,
+	Colore VARCHAR(255) DEFAULT 'nero',
+	IDPersona VARCHAR(255) NOT NULL,
+	CONSTRAINT PK_IDMacchina PRIMARY KEY (IDMacchina)
+)
+CREATE TABLE Persona(
+	IDPersona INT NOT NULL,
+	Nome VARCHAR(255) NOT NULL,
+	eta INT,
+	Professione VARCHAR(255),
+	CF VARCHAR(255) NOT NULL,
+	CONSTRAINT PK_IDPersona PRIMARY KEY (IDPersona) 
+)
+
+ALTER TABLE Auto
+ADD CONSTRAINT FK_IDAuto FOREIGN KEY (IDPersona) REFERENCES Persona(IDPersona)
+
+USE DBCorso
+
+SELECT Titolo, Annopubblicazione,prezzo
+FROM tbLibri
+
+SELECT titolo, prezzo 
+FROM tbLibri
+WHERE iva = 12
+
+SELECT DISTINCT scaffale
+FROM tbLibri
+
+SELECT titolo, prezzo, Year(GETDATE())-annopubblicazione AS AnniLibro
+FROM tbLibri 
+// la get date prende la data attuale e con year prendiamo solo l'anno della data
+
+SELECT Titolo, CONVERT(Date, GETDATE(),103) AS DataAttuale
+FROM tbLibri 
+//la convert può servire a convertire dei dati anche per esempio da int a string e con il 103 gli dico quel tipo di data
+//voglio che venga applicato
+
+SELECT Titolo,sottotitolo, Titolo + ' ' +isNull(sottotitolo,'') AS TitoloSottoTitolo
+FROM tbLibri 
+
+//concateniamo titolo con sottotitolo, ma se uno dei due campi è null ha la supremazia, allora
+//usiamo la funzione isNull e in caso sostituiamo qualche altra cosa al posto del Null
+//durante un operazione aritmetica gli int hanno la supremazia su gli altri tipi 
+//quindi se voglio il risultato in decimale bisogna convertire tutti gli interi
+//con le stringhe metto = vuol dire che mi cercherà un valore identico
+//con Like mi cerca una stringa con la parola inserita e in più posso delineare se c'è altro oltre alla parola che gli ho indicato
+//esempio: Like '%casa' -> mi cerca le stringe che finiscono per casa
+//like 'casa%' -> mi cerca le stringhe che iniziano per casa
+//operatori booleani AND, OR, NOT
+
+SELECT Titolo,Sottotitolo,Iva
+FROM tbLibri
+WHERE Titolo LIKE 'G%' AND annoPubblicazione>2020
+UNION
+SELECT Titolo,Sottotitolo,0 AS Iva
+FROM tbLibri
+WHERE Titolo LIKE 'A%' AND annoPubblicazione=2021
+
+//nella prima tabella c'è iva,invece nella seconda no(anche se sono la stessa tabella)
+//allora per fare la union posso mettere un valore simbolico nella select per eseguire ugualmente la union delle due query
+//se suo In nella condizione where posso dire per quali valori filtro le righe
+//esempio
+Select *
+From libri
+where anno in (2000,2001) //questa query mi da i libri pubblicati nell'anno 2000 o 2001 
+
+//esercizio
+USE Dbcorso
+
+SELECT Cognome
+FROM tbAutori
+WHERE Cognome LIKE 'W%'
+
+SELECT *
+FROM tbAutori
+WHERE Cognome LIKE 'W%' OR Cognome LIKE 'S%'
+
+SELECT *
+FROM tbAutori
+WHERE nome LIKE '%M%'
+
+SELECT *
+FROM tbAutori
+WHERE cognome LIKE 'L%' AND LuogoNascita = 'Italia'
+
+//Funzioni di aggregazione
+Count -> restituisce quante righe sono state restituite da una query
+La metto nella Select
+Sum -> somma tutti i valori della query
+devo controllare che non ci siano valori con null se no mi restituisce null, quindi vado ad utilizzare isNull per evitare l'errore
+AVG -> media del valore indicato nelle righe delle query
+Max-> resituisce il valore massimo
+Min-> restituisce il valore minimo
+
+SELECT SUM(prezzo) AS prezzoAnno,annopubblicazione
+FROM tbLibri
+GROUP BY AnnoPubblicazione
+ORDER BY AnnoPubblicazione desc
+
+
+SELECT avg(prezzo) AS prezzoMedio,annopubblicazione
+FROM tbLibri
+GROUP BY AnnoPubblicazione
+HAVING avg(prezzo) > 12
+ORDER BY AnnoPubblicazione desc
+
+
+SELECT AVG(prezzo) AS prezzoMedio
+FROM tbLibri
+where annopubblicazione > 2000
+
+SELECT COUNT(*) AS numeroLibri
+FROM tbLibri
+
+SELECT MIN(Posto) AS PostoMinimo , scaffale
+FROM tbLibri
+GROUP BY Scaffale
+ORDER BY PostoMinimo
+
+SELECT Max(AnnoPubblicazione) AS AnnoMax
+FROM tbLibri
+
+//join
+SELECT tbLibri.Titolo, tbEditori.Editore
+FROM tbLibri
+	JOIN tbEditori ON TbEditori.IdEditore = tblibri.idEditore
+	ORDER BY tblibri.titolo
+
+//esercizi JOIN
+SELECT tbLibri.Titolo, tbLingue.Lingua
+FROM tbLibri
+	JOIN tbLingue ON Tblingue.idlingua = tblibri.idlingua
+WHERE tbLibri.Annopubblicazione >2000
+
+SELECT tbLibri.Titolo, tbLingue.Lingua, isNull(tbAutori.Nome,' ')+' ' + isNull(tbAutori.cognome, ' ') AS Autoridbo.fn_diagramobjectsdbo.sp_alterdiagramdbo.sp_alterdiagram
+FROM tbLibri
+	JOIN tbLingue ON Tblingue.idlingua = tblibri.idlingua
+	JOIN tbAutoriLibri ON tbAutoriLibri.idLibro = tbLibri.idLibro
+		JOIN tbAutori ON tbAutori.idAutore = tbAutoriLibri.idAutore
+ORDER BY tbAutori.cognome
+
+SELECT tbLibri.Titolo, tbLibri.AnnoPubblicazione, tbLibri.Scaffale,tbLingue.Lingua, tbEditori.Editore
+FROM tbLibri
+	JOIN tbLingue ON Tblingue.idlingua = tblibri.idlingua
+	JOIN tbEditori ON tbEditori.Ideditore = tbLibri.idEditore
+WHERE tbLibri.scaffale = 18
+
+SELECT tbLibri.*
+FROM tbLibri
+	JOIN tbEditori ON tbEditori.Ideditore = tbLibri.idEditore
+WHERE tbEditori.Editore = 'Einaudi'
+
+SELECT COUNT(tbLibri.idLibro) AS numeroLibri, Tbeditori.editore
+FROM tbEditori
+	JOIN tbLibri ON tbLibri.Ideditore = tbEditori.idEditore
+group BY tbEditori.editore
+
+
+SELECT *
+FROM tbLibri
+	JOIN tbEditori on tbEditori.ideditore = tbLibri.idEditore
+	ORDER BY tbEditori.editore
+	
+	
+//sotto query e inserimento dati
+SELECT Lingua
+FROM tbLingue
+WHERE IdLingua IN(SELECT idLingua FROM tbLibri)
+
+//posso non mettere il valore se nella formazione della tabella c'è il default 
+//i value vanno messo tra i gli apici e i decimali hanno il punto, il valore Null è senza apici
+//dentro la values potrei mettere pure una select se restituisce lo stesso numero dei campi 
+INSERT INTO tabella(campo1, ..., campon)
+VALUES (val1,..., valn)
+
+//update
+update nometabella
+Set campo1 = valore1,
+	campo2 = valore2
+where <condizione>
+
+//delete
+Delete from nometabella
+where condizione
+
+Delete From tbLingue where IdLingua Not in (
+	Select IdLingua form tbLibri
+)
+
+
+//esercizi
