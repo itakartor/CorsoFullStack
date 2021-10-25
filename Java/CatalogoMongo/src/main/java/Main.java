@@ -9,12 +9,13 @@ public class Main {
         String NAMEDB = "Catalogo";
         String NAMECOLLECTION = "USER";
         boolean end = false;
-        Scanner keyboard = new Scanner(System.in);
-        int request;
+        Scanner keyboard = new Scanner(System.in);// in alternativa vedere gli stream
+        String request;
 
         Client client = new Client();
         //vado a richiedere la connessione al server mongo
         MongoClient mongoClient = client.CreateConnection();
+
         //vado a creare il database Catalogo o a prenderlo in caso che esista gia
         MongoDatabase CatalogoDB =mongoClient.getDatabase(NAMEDB);
         CatalogoDB.getCollection("USERS"); //creo la collezione
@@ -31,17 +32,18 @@ public class Main {
             System.out.println("====================");
             System.out.println("enter an integer for decision");
             try {
-                request = keyboard.nextInt();
+                request = keyboard.nextLine();
             }catch (InputMismatchException e)
             {
                 System.out.println("invalid input");
-                request = 0;
+                request = "0";
             }
 
 
-            switch (request) {
+            switch (Integer.parseInt(request)) {
                 case 0: {
                     System.out.println("bye!");
+                    mongoClient.close();
                     end = true;
                     break;
                 }
@@ -93,7 +95,7 @@ public class Main {
 
 /*
 {name:"ciao1",surname:"ciao1",birthDate:"1-1-1",cF:"a1",address:{street:"mio la vendetta",number:1},freeDay:0}
-        db.USER.insertMany({name:"ciao2",surname:"ciao2",birthDate:"2-13-13",cF:"a2",address:{street:"mio la vendetta",number:2},freeDay:0},
+        db.USER.insertMany({name:"ciao2",surname:"ciao2",birthDate:"2-13-13",cF:"a2",address:{street:"mio la vendetta",number:2},freeDay:0}),
         {name:"ciao3",surname:"ciao3",birthDate:"3-8-13",cF:"a3",address:{street:"mio la vendetta",number:3},freeDay:0},
         {name:"ciao4",surname:"ciao4",birthDate:"4-13-13",cF:"a4",address:{street:"mio la vendetta",number:4},freeDay:0},
         {name:"ciao5",surname:"ciao5",birthDate:"5-4-13",cF:"a5",address:{street:"mio la vendetta",number:5},freeDay:0})

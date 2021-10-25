@@ -1,9 +1,11 @@
+import com.mongodb.BasicDBObject;
 import com.mongodb.ConnectionString;
 import com.mongodb.MongoClientSettings;
 import com.mongodb.MongoCommandException;
 import com.mongodb.client.*;
 import com.mongodb.client.model.Filters;
 import org.bson.BsonDocument;
+import org.bson.BsonValue;
 import org.bson.Document;
 
 import java.util.InputMismatchException;
@@ -15,31 +17,28 @@ public class Client {
     public Client() {
         this.nMenbers = -1;
     }
-
+    //{name:"ciao5",surname:"ciao5",birthDate:"5-4-13",cF:"a5",address:{street:"mio la vendetta",number:5},freeDay:0})
+    public Document createDocument(String name,String surname,String birthDate,String street, int number,String cF)
+    {
+         return new Document("name",name).append("surname",surname).append("birthDate",birthDate).append("cF",cF)
+                .append("address", new BasicDBObject("street",street)
+                        .append("number",number)
+                ).append("freeDay",0);
+    }
     public MongoClient CreateConnection()
     {
         String connectionString = "mongodb://127.0.0.1:27017/admin";//dove mi sto connetendo per ora localhost
 
         MongoClientSettings settings = MongoClientSettings.builder()
                 .applyConnectionString(new ConnectionString(connectionString)).build(); //costruzione dei setting
-
+        /*System.out.println("sono i settings"+settings);
+        System.out.println(MongoClients.create(settings));*/
         return MongoClients.create(settings);
-    }
-    public boolean ExistDatabase(MongoClient client,String nameDB)
-    {
-        for (String i :client.listDatabaseNames())
-        {
-            if(i.equals(nameDB.toString()))
-            {
-                return true; // il database esiste gia
-            }
-        }
-        return false;//il database non esiste
     }
     public boolean InsertDatabase(Scanner keyboard, MongoDatabase mongoDatabase,String collectionName)
     {
         System.out.println("insert y if u want insert user with json otherwise n");
-        String response = keyboard.next();
+        String response = keyboard.nextLine();
         System.out.println(response);
         if(nMenbers == -1)// è il primo elemento che sto inserendo
         {
@@ -57,7 +56,7 @@ public class Client {
         if(response.contains("y"))
         {
             System.out.println("insert your json");
-            String json = keyboard.next();
+            String json = keyboard.nextLine();
             try {
                 json = json.replace("\r"," ").replace("\n"," ");
                 //System.out.println(json);
@@ -92,7 +91,7 @@ public class Client {
                 System.out.println("insert street");
                 street = keyboard.nextLine();
                 System.out.println("insert number of street");
-                number = keyboard.nextInt();
+                number = Integer.parseInt(keyboard.nextLine());
             }
             catch (InputMismatchException e)
             {
@@ -100,14 +99,15 @@ public class Client {
                 return false;
             }
 
-            mongoDatabase.getCollection(collectionName).insertOne(Document.parse(
+            /*mongoDatabase.getCollection(collectionName).insertOne(Document.parse(
                     "{name:\""+name+ "\","
                     +"surname:\""+surname+"\","
                     +"birthDate:\""+birthDate+"\","
                     +"cF:\""+cF+"\","
                     +"address:{street:\"" +street+ "\",number:" +"\""+number + "\""+  "},"
                     +"freeDay:\""+0+"\","
-                    + "}"));
+                    + "}"));*/
+            mongoDatabase.getCollection(collectionName).insertOne(createDocument(name,surname,birthDate,street,number,cF));
         }
         nMenbers++;
         return true;
@@ -125,7 +125,7 @@ public class Client {
     public boolean updateCollection(String collectionName, MongoDatabase mongoDatabase,Scanner keyboard)//ricerco gli utenti sempre per codice fiscale
     {           //posso aggiornare il nome oppure il cognome
         System.out.println("insert cf");
-        String cF = keyboard.next();
+        String cF = keyboard.nextLine();
         String name,surname;
         System.out.println("insert which attribute do u want update");
         System.out.println("0-name");
@@ -133,36 +133,36 @@ public class Client {
         System.out.println("2-name and surname");
         int request;
         try {
-            request = keyboard.nextInt();
+            request = Integer.parseInt(keyboard.nextLine());
         }
         catch (InputMismatchException e)
         {
             e.printStackTrace();
             request = 0;
         }
-        switch (request)
+        switch (request)//bisogna usare la nextLine anche per gli interi e poi si usa Integer.parser
         {
             case 0:
             {
                 System.out.println("write name");
-                name = keyboard.next();//"{\"name\":\""+name+"\"}"
-                mongoDatabase.getCollection(collectionName).updateMany(Filters.eq("cF",cF),BsonDocument.parse("{\"name\":\""+name+"\"}"));
+                name = keyboard.nextLine();//"{\"name\":\""+name+"\"}"
+                mongoDatabase.getCollection(collectionName).updateOne(Filters.eq("cF",cF),BsonDocument.parse("{$set:{\"name\":\""+name+"\"}}"));
                 break;
             }
             case 1:
             {
                 System.out.println("write surname");
-                surname = keyboard.next();
-                mongoDatabase.getCollection(collectionName).updateMany(Filters.eq("cF",cF),BsonDocument.parse("{\"name\":\""+surname+"\"}"));
+                surname = keyboard.nextLine();
+                mongoDatabase.getCollection(collectionName).updateOne(Filters.eq("cF",cF),BsonDocument.parse("{$set:{\"surname\":\""+surname+"\"}}3"));
                 break;
             }
             case 2:
             {
                 System.out.println("write name");
-                name = keyboard.next();
+                name = keyboard.nextLine();
                 System.out.println("write surname");
-                surname = keyboard.next();
-                mongoDatabase.getCollection(collectionName).updateMany(Filters.eq("cF",cF),//filtro
+                surname = keyboard.nextLine();
+                mongoDatabase.getCollection(collectionName).updateOne(Filters.eq("cF",cF),//filtro
                         BsonDocument.parse("{$set:{\"name\":\""+name+"\",\"surname\":\""+surname+"\"}}"));
                 break;
             }//BsonDocument.parse("{\"cF\":\""+ cF +"\"}"),BsonDocument.parse("{\"name\":\""+name+"\",\"surname\":\""+surname+"\"}"
@@ -172,13 +172,13 @@ public class Client {
     public boolean searchNameSurname(String collectionName, MongoDatabase mongoDatabase,Scanner keyboard)
     {
         System.out.println("insert y if u want search user with json otherwise n");
-        String response = keyboard.next();
+        String response = keyboard.nextLine();
         //System.out.println(response);
         FindIterable<Document> findResult;
         if(response.contains("y"))
         {
             System.out.println("insert your filter json");
-            String filterJson = keyboard.next();
+            String filterJson = keyboard.nextLine();
             try {
                 filterJson = filterJson.replace("\r"," ").replace("\n"," ");
                 findResult = mongoDatabase.getCollection(collectionName).find(BsonDocument.parse(filterJson));
@@ -188,14 +188,23 @@ public class Client {
                 return false;
             }
         }
-        else
+        /*else
         {
             String name,surname;
             System.out.println("write name");
-            name = keyboard.next();
+            name = keyboard.nextLine();
             System.out.println("write surname");
-            surname = keyboard.next();
+            surname = keyboard.nextLine();
             findResult = mongoDatabase.getCollection(collectionName).find(Filters.or(BsonDocument.parse("{name:\"" + name + "\"}"), BsonDocument.parse("{surname:\"" + surname + "\"}")));
+        }*///{db.USER.deleteOne({"cF":"a5"})}
+        else//trova l'utente anche per iniziale e non è case sensitive
+        {
+            String name,surname;
+            System.out.println("write name");
+            name = keyboard.nextLine();
+            System.out.println("write surname");
+            surname = keyboard.nextLine();
+            findResult = mongoDatabase.getCollection(collectionName).find(Filters.or(BsonDocument.parse("{name:{$regex:/^" + name + "/,$options:\"im\"}}"), BsonDocument.parse("{surname:\"" + surname + "\"}")));
         }
         for(Document i:findResult)
         {
@@ -209,7 +218,7 @@ public class Client {
         String cF;
         try {
             System.out.println("write cF");
-            cF = keyboard.next();
+            cF = keyboard.nextLine();
         }catch (InputMismatchException e)
         {
             System.out.println("[ERROR DELETE]");
@@ -226,7 +235,7 @@ public class Client {
         String cF;
         try {
             System.out.println("write cF");
-            cF = keyboard.next();
+            cF = keyboard.nextLine();
         }catch (InputMismatchException e)
         {
             System.out.println("[ERROR INCREASE]");
@@ -241,7 +250,7 @@ public class Client {
         String cF;
         try {
             System.out.println("write cF");
-            cF = keyboard.next();
+            cF = keyboard.nextLine();
         }catch (InputMismatchException e)
         {
             System.out.println("[ERROR INCREASE]");
