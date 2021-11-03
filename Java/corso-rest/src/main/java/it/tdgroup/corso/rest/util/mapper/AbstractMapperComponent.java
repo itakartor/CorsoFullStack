@@ -1,9 +1,12 @@
 package it.tdgroup.corso.rest.util.mapper;
 
 import it.tdgroup.corso.rest.exception.MapperException;
+import it.tdgroup.corso.rest.risorse.topic.Topic;
+import it.tdgroup.corso.rest.risorse.topic.TopicDTO;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Created by s.g.
