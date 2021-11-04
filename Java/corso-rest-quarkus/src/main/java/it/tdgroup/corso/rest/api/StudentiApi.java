@@ -3,10 +3,8 @@ package it.tdgroup.corso.rest.api;
 import it.tdgroup.corso.rest.api.exception.ApplicationException;
 import it.tdgroup.corso.rest.api.exception.MapperException;
 import it.tdgroup.corso.rest.api.exception.ServiceException;
-import it.tdgroup.corso.rest.risorse.dto.RisorsaDTO;
 import it.tdgroup.corso.rest.risorse.studente.FilterDTO;
 import it.tdgroup.corso.rest.risorse.studente.StudenteDTO;
-import it.tdgroup.corso.rest.risorse.studente.StudenteRepository;
 import it.tdgroup.corso.rest.risorse.studente.StudenteService;
 import lombok.extern.apachecommons.CommonsLog;
 import org.eclipse.microprofile.openapi.annotations.Operation;
@@ -16,7 +14,6 @@ import org.eclipse.microprofile.openapi.annotations.responses.APIResponses;
 import javax.inject.Inject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 import java.net.URI;
 import java.util.List;
 
@@ -41,11 +38,11 @@ public class StudentiApi {
     @Operation(//serve per descrivere il servizio
             summary = "Endpoint per la creazione di uno studente",
             description = "Crea uno studente sul sistema")
-    public Response creaStudente(StudenteDTO studenteDTO) throws ApplicationException {
+    public javax.ws.rs.core.Response creaStudente(StudenteDTO studenteDTO) throws ApplicationException {
         try {
             var idStudente = studenteService.crea(studenteDTO);
             log.info("Nuovo studente creato con id:" + idStudente);
-            return Response.created(URI.create("/studenti/" + idStudente)).build();
+            return javax.ws.rs.core.Response.created(URI.create("/studenti/" + idStudente)).build();
         } catch (ServiceException ex) {
             throw new ApplicationException(ex);
         }
@@ -62,11 +59,11 @@ public class StudentiApi {
     @Operation(summary = "Endpoint per il recupero di uno studente", description = "recupera uno studente sul sistema in base ad un id")
     @GET
     @Path("/{matricola}")
-    public Response recuperaStudenteMatricola(@PathParam("matricola") String matricola) throws ApplicationException {
+    public javax.ws.rs.core.Response recuperaStudenteMatricola(@PathParam("matricola") String matricola) throws ApplicationException {
         try {
             log.info("Recupero studente con matricola:" + matricola);
             StudenteDTO studenteDTO = studenteService.findByMatricola(matricola);
-            return Response.ok(studenteDTO).build();
+            return javax.ws.rs.core.Response.ok(studenteDTO).build();
         } catch (ServiceException ex) {
             throw new ApplicationException(ex);
         }
@@ -83,14 +80,18 @@ public class StudentiApi {
                             responseCode = "200",
                             description = "Studenti trovati con successo")})
     @Operation(//serve per descrivere il servizio
-            summary = "Endpoint per la creazione di uno studente",
-            description = "Crea uno studente sul sistema")
-    public Response ricercaStudente(FilterDTO filterDTO) throws ApplicationException, ServiceException {
-        List<StudenteDTO> studenteDTOList = studenteService.find(filterDTO);
-        ResultDTO resultDTO = new ResultDTO();
-        resultDTO.setStudenteDTOList(studenteDTOList);
-        log.info("studenti trovati" );
-        return Response.ok(resultDTO).build();
+            summary = "Endpoint per la ricerca con un filtro di uno studente o piu studenti",
+            description = "cerco degli studenti sul sistema")
+    public javax.ws.rs.core.Response ricercaStudente(FilterDTO filterDTO) throws ApplicationException, ServiceException {
+
+        if (filterDTO != null) {
+            List<StudenteDTO> studenteDTOList = studenteService.find(filterDTO);
+            Response response = new Response();
+            response.setStudenteDTOList(studenteDTOList);
+            log.info("studenti trovati");
+            return javax.ws.rs.core.Response.ok(response).build();
+        }
+        return javax.ws.rs.core.Response.serverError().build();
     }
 
     @APIResponses(
@@ -101,16 +102,16 @@ public class StudentiApi {
                     @APIResponse(
                             responseCode = "200",
                             description = "Studente recuperata con successo")})
-    @Operation(summary = "Endpoint per il recupero di uno studente", description = "recupera uno studente sul sistema in base ad un id")
+    @Operation(summary = "Endpoint per il recupero di tutti gli studenti", description = "recupera tutti gli studenti")
     @GET
     @Path("")
-    public Response recuperaStudenti() throws ApplicationException {
+    public javax.ws.rs.core.Response recuperaStudenti() throws ApplicationException {
         try {
             log.info("Recupero studenti");
             List<StudenteDTO> studenteDTO = studenteService.elenco();
-            ResultDTO resultDTO = new ResultDTO();
-            resultDTO.setStudenteDTOList(studenteDTO);
-            return Response.ok(resultDTO).build();
+            Response response = new Response();
+            response.setStudenteDTOList(studenteDTO);
+            return javax.ws.rs.core.Response.ok(response).build();
         } catch (ServiceException | MapperException ex) {
             throw new ApplicationException(ex);
         }

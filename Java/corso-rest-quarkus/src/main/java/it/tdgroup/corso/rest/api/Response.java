@@ -6,6 +6,6 @@ import lombok.Data;
 import java.util.List;
 
 @Data
-public class ResultDTO {
+public class Response {
     List<StudenteDTO> studenteDTOList;
 }
