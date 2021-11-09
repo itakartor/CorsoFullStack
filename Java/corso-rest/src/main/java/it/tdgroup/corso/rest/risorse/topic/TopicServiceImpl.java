@@ -2,10 +2,8 @@ package it.tdgroup.corso.rest.risorse.topic;
 
 import it.tdgroup.corso.rest.exception.MapperException;
 import it.tdgroup.corso.rest.exception.ServiceException;
-import it.tdgroup.corso.rest.risorse.esame.Esame;
-import it.tdgroup.corso.rest.risorse.post.Post;
-import it.tdgroup.corso.rest.risorse.post.PostDTO;
-import it.tdgroup.corso.rest.risorse.utente.Utente;
+import it.tdgroup.corso.rest.risorse.topic.post.Post;
+import it.tdgroup.corso.rest.risorse.topic.post.utente.Utente;
 import lombok.extern.apachecommons.CommonsLog;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

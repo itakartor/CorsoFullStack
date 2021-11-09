@@ -1,4 +1,4 @@
-package it.tdgroup.corso.rest.risorse.utente;
+package it.tdgroup.corso.rest.risorse.topic.post.utente;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;

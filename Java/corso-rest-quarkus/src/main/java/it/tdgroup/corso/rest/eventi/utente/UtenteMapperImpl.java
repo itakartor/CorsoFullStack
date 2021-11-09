@@ -1,22 +1,20 @@
-package it.tdgroup.corso.rest.risorse.utente;
+package it.tdgroup.corso.rest.eventi.utente;
 
-import it.tdgroup.corso.rest.exception.MapperException;
+import it.tdgroup.corso.rest.api.exception.MapperException;
 import it.tdgroup.corso.rest.util.mapper.AbstractMapperComponent;
-import org.springframework.stereotype.Component;
 
-@Component
+import javax.enterprise.context.ApplicationScoped;
+
+@ApplicationScoped
 public class UtenteMapperImpl extends AbstractMapperComponent<UtenteDTO,Utente> {
-
-
     @Override
     public UtenteDTO convertEntityToDto(Utente entity) throws MapperException {
         if(entity != null)
         {
-            UtenteDTO utenteDTO = UtenteDTO.builder()
+            return UtenteDTO.builder()
                     .cognome(entity.getCognome())
                     .nome(entity.getNome())
                     .build();
-            return utenteDTO;
         }
         return null;
     }
@@ -25,10 +23,9 @@ public class UtenteMapperImpl extends AbstractMapperComponent<UtenteDTO,Utente> 
     public Utente convertDtoToEntity(UtenteDTO dto) throws MapperException {
         if(dto != null)
         {
-            Utente utente = Utente.builder()
-                    .cognome(dto.getCognome())
-                    .nome(dto.getNome())
-                    .build();
+            Utente utente = new Utente();
+            utente.setCognome(dto.getCognome());
+            utente.setNome(dto.getNome());
             return utente;
         }
         return null;

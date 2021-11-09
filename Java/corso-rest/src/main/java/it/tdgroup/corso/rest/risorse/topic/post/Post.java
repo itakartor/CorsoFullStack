@@ -1,6 +1,6 @@
-package it.tdgroup.corso.rest.risorse.post;
+package it.tdgroup.corso.rest.risorse.topic.post;
 
-import it.tdgroup.corso.rest.risorse.utente.Utente;
+import it.tdgroup.corso.rest.risorse.topic.post.utente.Utente;
 import lombok.Builder;
 import lombok.Data;
 import org.bson.types.ObjectId;

@@ -1,10 +1,9 @@
-package it.tdgroup.corso.rest.risorse.post;
+package it.tdgroup.corso.rest.risorse.topic.post;
 
 import it.tdgroup.corso.rest.exception.MapperException;
-import it.tdgroup.corso.rest.risorse.utente.UtenteMapperImpl;
+import it.tdgroup.corso.rest.risorse.topic.post.utente.UtenteMapperImpl;
 import it.tdgroup.corso.rest.util.mapper.AbstractMapperComponent;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Component;
 
 @Component

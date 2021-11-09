@@ -1,4 +1,4 @@
-package it.tdgroup.corso.rest.risorse.docente;
+package it.tdgroup.corso.rest.risorse.esame.docente;
 
 import lombok.Builder;
 import lombok.Data;

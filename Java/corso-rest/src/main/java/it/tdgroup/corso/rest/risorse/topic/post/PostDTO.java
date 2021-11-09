@@ -1,8 +1,8 @@
-package it.tdgroup.corso.rest.risorse.post;
+package it.tdgroup.corso.rest.risorse.topic.post;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
-import it.tdgroup.corso.rest.risorse.utente.UtenteDTO;
+import it.tdgroup.corso.rest.risorse.topic.post.utente.UtenteDTO;
 import lombok.Builder;
 import lombok.Data;
 

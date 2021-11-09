@@ -1,7 +1,7 @@
 package it.tdgroup.corso.rest.risorse.esame;
 
 import it.tdgroup.corso.rest.exception.MapperException;
-import it.tdgroup.corso.rest.risorse.docente.DocenteMapperImpl;
+import it.tdgroup.corso.rest.risorse.esame.docente.DocenteMapperImpl;
 import it.tdgroup.corso.rest.studente.StudenteMapperImpl;
 import it.tdgroup.corso.rest.util.mapper.AbstractMapperComponent;
 import org.springframework.beans.factory.annotation.Autowired;

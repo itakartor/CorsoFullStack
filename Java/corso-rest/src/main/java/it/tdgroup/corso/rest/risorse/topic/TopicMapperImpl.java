@@ -1,7 +1,7 @@
 package it.tdgroup.corso.rest.risorse.topic;
 
 import it.tdgroup.corso.rest.exception.MapperException;
-import it.tdgroup.corso.rest.risorse.post.PostMapperImpl;
+import it.tdgroup.corso.rest.risorse.topic.post.PostMapperImpl;
 import it.tdgroup.corso.rest.util.mapper.AbstractMapperComponent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

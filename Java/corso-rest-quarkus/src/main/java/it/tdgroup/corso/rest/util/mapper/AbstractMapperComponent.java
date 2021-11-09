@@ -2,6 +2,7 @@ package it.tdgroup.corso.rest.util.mapper;
 
 import it.tdgroup.corso.rest.api.exception.MapperException;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,7 +24,7 @@ public abstract class AbstractMapperComponent<T, E> implements MapperComponent<T
     }
 
     @Override
-    public List<E> convertDtoToEntity(List<T> dtoList) throws MapperException {
+    public List<E> convertDtoToEntity(List<T> dtoList) throws MapperException, ParseException {
         List<E> entityList = new ArrayList<>();
         if (dtoList != null) {
             for (T dto : dtoList) {

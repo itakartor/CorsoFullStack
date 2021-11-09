@@ -1,20 +1,19 @@
-package it.tdgroup.corso.rest.risorse.docente;
+package it.tdgroup.corso.rest.eventi.utente;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
+import io.quarkus.runtime.annotations.RegisterForReflection;
 import lombok.Builder;
 import lombok.Data;
 
 @Data
 @Builder
-@JsonDeserialize(builder = DocenteDTO.DocenteDTOBuilder.class)
-public class DocenteDTO{
-
+@JsonDeserialize(builder = UtenteDTO.UtenteDTOBuilder.class)
+@RegisterForReflection
+public class UtenteDTO {
     private String nome;
     private String cognome;
-    private String email;
-
     @JsonPOJOBuilder(withPrefix = "")
-    public static class DocenteDTOBuilder {
+    public static class UtenteDTOBuilder {
     }
 }

@@ -1,4 +1,4 @@
-package it.tdgroup.corso.rest.risorse.docente;
+package it.tdgroup.corso.rest.risorse.esame.docente;
 
 import it.tdgroup.corso.rest.exception.MapperException;
 import it.tdgroup.corso.rest.util.mapper.AbstractMapperComponent;
