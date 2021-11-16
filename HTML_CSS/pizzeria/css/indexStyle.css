@@ -1,0 +1,9 @@
+.navbar-nav > li > a {
+    color: white!important;
+}
+.navbar-toggler {
+    background-color: white;
+  }
+p{
+    color: white;
+}
