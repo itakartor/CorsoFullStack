@@ -85,6 +85,7 @@ public class StudentiApi {
     public javax.ws.rs.core.Response ricercaStudente(FilterDTO filterDTO) throws ApplicationException, ServiceException {
 
         if (filterDTO != null) {
+            log.info("sto facendo la ricerca filtrata");
             List<StudenteDTO> studenteDTOList = studenteService.find(filterDTO);
             Response response = new Response();
             response.setStudenteDTOList(studenteDTOList);
